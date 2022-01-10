@@ -7,7 +7,7 @@ export enum RecurrenceRuleType {
 
 type RecurrenceRule = { type: RecurrenceRuleType.WEEKLY }
 
-type RecurringTransaction = {
+export type RecurringTransaction = {
     amount: number,
     name: string,
     recurrence_rule: RecurrenceRule,

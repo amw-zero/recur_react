@@ -1,5 +1,5 @@
-// import React from 'react'; 
-import { Implementation, Server, Client, RecurrenceRuleType } from "./recur";
+import React, { useEffect, useState } from 'react'; 
+import { Implementation, Server, Client, RecurrenceRuleType, RecurringTransaction } from "./recur";
 import { Formik, Form, Field } from "formik";
 
 const kernel = new Implementation(new Client(), new Server());
@@ -7,9 +7,29 @@ const kernel = new Implementation(new Client(), new Server());
 type FormValues = { amount: number, name: string };
 
 const App = () => {
-  const handleSubmit = (values: FormValues) => {
+  const [recurringTransactions, setRecurringTransactions] = useState<RecurringTransaction[]>([]);
+
+  useEffect(() => {
+    let rts = kernel.viewRecurringTransactions();
+    setRecurringTransactions(rts);
+  }, []);
+  
+  function apply<T> (action: (k: Implementation) => T, stateSetter: React.Dispatch<React.SetStateAction<T>>) {
+    let data = action(kernel);
+
+    stateSetter(data);
+  }
+
+  const handleSubmit = (values: FormValues, { setSubmitting }: { setSubmitting: (s: boolean) => void }) => {
     const { amount, name } = values;
-    kernel.addRecurringTransaction({ amount, name, recurrence_rule: { type: RecurrenceRuleType.WEEKLY } })
+    apply(
+      (k) => {
+        k.addRecurringTransaction({ amount, name, recurrence_rule: { type: RecurrenceRuleType.WEEKLY } });
+        return k.viewRecurringTransactions();
+      },
+      setRecurringTransactions
+    );
+    setSubmitting(false);
   };
 
   return (
@@ -28,9 +48,9 @@ const App = () => {
           </Form>
         )}
       </Formik>
-      {kernel.viewRecurringTransactions().map((rt) => {
+      {recurringTransactions.map((rt) => {
         return (
-          <p key={rt.name}>{rt.name}</p>
+          <p key={rt.name}>{`${rt.name}: ${rt.amount}`}</p>
         )
       })}
     </div>
