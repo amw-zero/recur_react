@@ -1,34 +1,17 @@
-import React, { useEffect, useState } from 'react'; 
-import { Implementation, Server, Client, RecurrenceRuleType, RecurringTransaction } from "./recur";
+import React from 'react'; 
 import { Formik, Form, Field } from "formik";
-
-const kernel = new Implementation(new Client(), new Server());
+import { Application as Client, RecurringTransaction } from "./generated-client";
+import { observer } from 'mobx-react-lite';
 
 type FormValues = { amount: number, name: string };
 
-const App = () => {
-  const [recurringTransactions, setRecurringTransactions] = useState<RecurringTransaction[]>([]);
-
-  useEffect(() => {
-    let rts = kernel.viewRecurringTransactions();
-    setRecurringTransactions(rts);
-  }, []);
-  
-  function apply<T> (action: (k: Implementation) => T, stateSetter: React.Dispatch<React.SetStateAction<T>>) {
-    let data = action(kernel);
-
-    stateSetter(data);
-  }
-
+const App = observer(({client}: { client: Client }) => {
   const handleSubmit = (values: FormValues, { setSubmitting }: { setSubmitting: (s: boolean) => void }) => {
     const { amount, name } = values;
-    apply(
-      (k) => {
-        k.addRecurringTransaction({ amount, name, recurrence_rule: { type: RecurrenceRuleType.WEEKLY } });
-        return k.viewRecurringTransactions();
-      },
-      setRecurringTransactions
-    );
+    let rt = new RecurringTransaction();
+    rt.amount = amount;
+    rt.name = name;
+    client.addClient(rt);
     setSubmitting(false);
   };
 
@@ -48,13 +31,13 @@ const App = () => {
           </Form>
         )}
       </Formik>
-      {recurringTransactions.map((rt) => {
+      {client.recurring_transactions.map((rt) => {
         return (
           <p key={rt.name}>{`${rt.name}: ${rt.amount}`}</p>
         )
       })}
     </div>
   );
-}
+});
 
 export default App;

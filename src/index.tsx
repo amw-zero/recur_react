@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Application as Client } from "./generated-client";
+
+const client = new Client();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App client={client}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
