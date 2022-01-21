@@ -4,8 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Application as Client } from "./generated-client";
+import { makeAutoObservable } from 'mobx';
 
-const client = new Client();
+const client = new Client((c) => makeAutoObservable(c));
 
 ReactDOM.render(
   <React.StrictMode>

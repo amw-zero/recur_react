@@ -1,5 +1,3 @@
-import { makeAutoObservable } from "mobx";
-
 export class RecurringTransaction {
     amount: number = 0;
     name: string = "";
@@ -10,12 +8,13 @@ export class Scenario {
     recurring_transactions:any;
 }
 
+// Generate test (property based) that compares this to spec
 export class Application {
     recurring_transactions: RecurringTransaction[] = [];
     scenarios: Scenario[] = [];
 
-    constructor() {
-        makeAutoObservable(this);
+    constructor(config: (a: Application) => void) {
+        config(this);        
     }
 
     addClient(rt: RecurringTransaction) { 
