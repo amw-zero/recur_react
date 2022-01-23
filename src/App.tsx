@@ -31,7 +31,7 @@ const App = observer(({client}: { client: Client }) => {
           </Form>
         )}
       </Formik>
-      {client.recurring_transactions.map((rt) => {
+      {client.recurring_transactions.map((rt: RecurringTransaction) => {
         return (
           <p key={rt.name}>{`${rt.name}: ${rt.amount}`}</p>
         )

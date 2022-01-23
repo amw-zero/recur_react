@@ -1,31 +1,35 @@
 export class RecurringTransaction {
-    amount: number = 0;
-    name: string = "";
+
+  amount: number = 0;
+  name: string = "";
+  
 }
 
-export class Scenario {
-    name: any;
-    recurring_transactions:any;
-}
-
-// Generate test (property based) that compares this to spec
-export class Application {
-    recurring_transactions: RecurringTransaction[] = [];
-    scenarios: Scenario[] = [];
-
+  export class Application {
     constructor(config: (a: Application) => void) {
-        config(this);        
-    }
+    config(this) }
+  
+  recurring_transactions: RecurringTransaction[] = [];
 
-    addClient(rt: RecurringTransaction) { 
-        fetch("http://localhost:3000/recurring_transactions", { method: "POST", body: JSON.stringify(rt) });
-        this.recurring_transactions.push(rt);
-    }
-    
-    removeClient(rt: RecurringTransaction) { fetch("http://localhost:3000/recurring_transactions", { method: "POST", body: JSON.stringify(rt) }) }
-    
-    updateClient(rt: RecurringTransaction) { fetch("http://localhost:3000/recurring_transactions", { method: "POST", body: JSON.stringify(rt) }) }
-    
-    add_scenarioClient(s: RecurringTransaction) { fetch("http://localhost:3000/scenarios", { method: "POST", body: JSON.stringify(s) }) }
-
+  addClient(rt: RecurringTransaction) {
+    fetch("http://localhost:3000/recurring_transactions", { method: "POST", body: JSON.stringify(rt), 
+      headers: { "Content-Type": "application/json" } });
+  this.recurring_transactions.push(rt);
+   }
+  
+  removeClient(rt: RecurringTransaction) {
+    fetch("localhost:3000/recurring_transactions", { method: "DELETE", body: JSON.stringify(rt) });
+    this.recurring_transactions.push(rt);
+   }
+  
+  updateClient(rt: RecurringTransaction) {
+    fetch("localhost:3000/recurring_transactions", { method: "PUT", body: JSON.stringify(rt) });
+    this.recurring_transactions.push(rt);
+   }
+  
+  view() {
+    return this.recurring_transactions }
+  
+  
   }
+  

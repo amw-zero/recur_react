@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { Application as Client } from "./generated-client";
 import { makeAutoObservable } from 'mobx';
 
-const client = new Client((c) => makeAutoObservable(c));
+const client = new Client((c: Client) => makeAutoObservable(c));
 
 ReactDOM.render(
   <React.StrictMode>
