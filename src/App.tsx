@@ -11,7 +11,7 @@ const App = observer(({client}: { client: Client }) => {
     let rt = new RecurringTransaction();
     rt.amount = amount;
     rt.name = name;
-    client.addClient(rt);
+    client.create_recurring_transactionClient(rt);
     setSubmitting(false);
   };
 
