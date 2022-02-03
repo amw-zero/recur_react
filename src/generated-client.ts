@@ -1,6 +1,6 @@
-export class RecurringTransaction {
-amount: number = 0;
-name: string = "";
+export type RecurringTransaction = {
+amount: number;
+name: string;
 
 }
 
@@ -25,7 +25,7 @@ this.recurring_transactions.push(rt);
  }
 
 view_recurring_transactions() {
-  this.recurring_transactions }
+  return this.recurring_transactions }
 
 
 }
