@@ -1,6 +1,8 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
+import { TextInput, NumberInput } from "./FormControls";
 import { useStore } from "./store";
 
+// This should be a generated "CreateReq" type
 type FormValues = { amount: number, name: string };
 
 export const RecurringTransactionForm = () => {
@@ -15,13 +17,16 @@ export const RecurringTransactionForm = () => {
       initialValues={{ amount: 0.0, name: "" }}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting }: { isSubmitting: boolean}) => (
+      {({ isSubmitting }: FormikProps<FormValues>) => (
         <Form>
-          <Field type="number" name="amount" />
-          <Field type="string" name="name" />
-          <button type="submit" disabled={isSubmitting}>
-          Submit
-        </button>
+          <Field name="amount" component={NumberInput} label="Amount" placeholder="Amount" />
+          <Field name="name" component={TextInput} label="Name" placeholder="Name" />
+
+          <div className="field">
+            <div className="control">
+              <button type="submit" className="button is-link">Submit</button>
+            </div>
+          </div>
         </Form>
       )}
     </Formik>
