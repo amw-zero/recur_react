@@ -2,11 +2,18 @@ export interface RecurringTransaction {
   id: number;
 amount: number;
 name: string;
+recurrence_rule: string
 }
 
 export interface RecurringTransactionCreateReq {
 amount: number;
 name: string;
+recurrence_rule: string;
+}
+
+export interface CreateRecurringTransaction {
+  amount: number;
+  name: String;
 }
 
 export class Application {
@@ -14,9 +21,12 @@ export class Application {
   config(this) }
 
 recurring_transactions: RecurringTransaction[] = [];
-create_recurring_transactionClient(rt: RecurringTransactionCreateReq) {
-  fetch("http://localhost:3000/recurring_transactions", { method: "POST", body: JSON.stringify(rt), headers: { "Content-Type": "application/json" } });
-this.recurring_transactions.push({...rt, id: 1});
+
+async create_recurring_transaction(rtc: CreateRecurringTransaction) {
+  let resp = await fetch("http://localhost:3000/recurring_transactions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(rtc) });
+  let rt = await resp.json()
+  console.log({createdTransaction: rt});
+  this.recurring_transactions.push(rt);
  }
 
  delete_recurring_transactionClient(rt: RecurringTransaction) {
@@ -30,11 +40,10 @@ update_recurring_transactionClient(rt: RecurringTransaction) {
 this.recurring_transactions.push(rt);
  }
 
+
+
  async view_recurring_transactionsClient() {
-  const rts = await fetch("http://localhost:3000/recurring_transactions", { method: "GET", headers: { "Content-Type": "application/json" } });
-  const rts_json = await rts.json();
-  this.recurring_transactions = rts_json;
+  let data = await fetch("http://localhost:3000/recurring_transactions", { method: "GET", headers: { "Content-Type": "application/json" } });
+this.recurring_transactions = await data.json();
  }
-
-
 }

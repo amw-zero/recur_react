@@ -7,8 +7,9 @@ const RecurringTransactionRow = observer(({ recurringTransaction }: { recurringT
     <tr>
       <th>{recurringTransaction.name}</th>
       <td>{recurringTransaction.amount}</td>
+      <td>{recurringTransaction.recurrence_rule}</td>
       <td>
-        <button onClick={() => client.delete_recurring_transactionClient(recurringTransaction)}>Delete</button>
+        <button className="button is-danger" onClick={() => client.delete_recurring_transactionClient(recurringTransaction)}>Delete</button>
       </td>
     </tr>
   );
@@ -23,6 +24,7 @@ export const RecurringTransactions = observer(() => {
         <tr>
             <th>Name</th>
             <th>Amount</th>
+            <th>Recurrence rule</th>
             <th></th>
         </tr>
       </thead>
